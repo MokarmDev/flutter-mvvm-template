@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../config/theme/app_colors.dart';
-import '../../features/theme/domain/entities/theme_entity.dart';
+import '../../features/theme/data/models/theme_entity.dart';
 import '../../features/theme/presentation/manager/theme_cubit.dart';
 import '../../features/theme/presentation/manager/theme_state.dart';
 
