@@ -1,6 +1,6 @@
-import '../../domain/repositories/theme_repository.dart';
-import '../../domain/entities/theme_entity.dart';
 import '../datasources/theme_local_data_source.dart';
+import '../models/theme_entity.dart';
+import 'theme_repository.dart';
 
 class ThemeRepositoryImpl implements ThemeRepository {
   final ThemeLocalDataSource localDataSource;
