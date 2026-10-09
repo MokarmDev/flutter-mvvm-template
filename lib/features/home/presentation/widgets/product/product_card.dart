@@ -5,7 +5,7 @@ import '../../../../../core/extensions/layout_extensions.dart';
 import '../../../../../core/extensions/spacing_extension.dart';
 import '../../../../../core/extensions/widget_extensions.dart';
 import '../../../../../shared/widgets/custom_network_image.dart';
-import '../../../domain/entities/product/product_entity.dart';
+import '../../../data/models/product/product_entity.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
