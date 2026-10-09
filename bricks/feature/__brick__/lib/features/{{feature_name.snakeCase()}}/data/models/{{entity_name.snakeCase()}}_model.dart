@@ -1,4 +1,4 @@
-import '../../domain/entities/{{entity_name.snakeCase()}}_entity.dart';
+import '{{entity_name.snakeCase()}}_entity.dart';
 
 class {{entity_name.pascalCase()}}Model extends {{entity_name.pascalCase()}}Entity {
   const {{entity_name.pascalCase()}}Model();
