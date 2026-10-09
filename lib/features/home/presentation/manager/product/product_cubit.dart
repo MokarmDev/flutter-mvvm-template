@@ -2,20 +2,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../shared/mixin/cancelable_safe_cubit_mixin.dart';
 import '../../../../../shared/models/pagination/pagination_params.dart';
-import '../../../domain/entities/product/product_entity.dart';
-import '../../../domain/usecases/get_product_usecase.dart';
+import '../../../data/models/product/product_entity.dart';
+import '../../../data/repositories/home_repository.dart';
 import 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState>
     with CancelableSafeCubitMixin<ProductState> {
-  final GetProductUseCase getProductUseCase;
+  final HomeRepository homeRepository;
 
   final List<ProductEntity> _products = [];
   List<ProductEntity> get products => List.unmodifiable(_products);
 
   bool hasReachedMax = false;
 
-  ProductCubit(this.getProductUseCase) : super(ProductInitial());
+  ProductCubit(this.homeRepository) : super(ProductInitial());
 
   Future<void> loadProducts({int limit = 10, bool isRefresh = false}) async {
     if (isRefresh) {
@@ -33,7 +33,7 @@ class ProductCubit extends Cubit<ProductState>
     }
 
     final result = await runCancelable(
-      getProductUseCase.call(
+      homeRepository.getProduct(
         PaginationParams(skip: _products.length, limit: limit),
       ),
     );
