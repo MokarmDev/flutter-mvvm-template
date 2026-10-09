@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../../../core/storage/storage_keys.dart';
-import '../../domain/entities/product/product_entity.dart';
+import '../models/product/product_entity.dart';
 import '../models/product/product_model.dart';
 
 abstract class HomeLocalDataSource {
