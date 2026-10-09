@@ -1,10 +1,10 @@
-# 🧱 Mason Brick Guide — Feature Generator
+# Mason Brick Guide — Feature Generator
 
-> A tool to generate complete Clean Architecture features with a single command.
+> A tool to generate complete MVVM features with a single command.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Prerequisites](#-prerequisites)
 2. [Initial Setup (Once)](#️-initial-setup-once)
@@ -16,7 +16,7 @@
 
 ---
 
-## ✅ Prerequisites
+## Prerequisites
 
 Make sure **Mason CLI** is installed on your machine:
 
@@ -31,7 +31,7 @@ mason --version
 
 ---
 
-## ⚙️ Initial Setup (Once)
+## Initial Setup (Once)
 
 From the **project root** (same directory as `mason.yaml`):
 
@@ -49,7 +49,7 @@ bricks:
 
 ---
 
-## 🚀 Generating a New Feature
+## Generating a New Feature
 
 ### General Syntax
 
@@ -97,7 +97,7 @@ Enter main entity name (PascalCase): Order
 
 ---
 
-## 📁 Generated Files
+## Generated Files
 
 Running the command with `feature_name=order` and `entity_name=Order` produces:
 
@@ -108,21 +108,15 @@ lib/features/order/
 │   ├── datasources/
 │   │   └── order_remote_data_source.dart    ← Abstract class + Implementation
 │   ├── models/
+│   │   ├── order_entity.dart                 ← Equatable entity
 │   │   └── order_model.dart                  ← Extends OrderEntity + fromJson/toJson
 │   └── repositories/
+│       ├── order_repository.dart             ← Abstract interface
 │       └── order_repository_impl.dart        ← Uses safeCall automatically
-│
-├── domain/
-│   ├── entities/
-│   │   └── order_entity.dart                 ← Equatable entity
-│   ├── repositories/
-│   │   └── order_repository.dart             ← Abstract interface
-│   └── usecases/
-│       └── get_orders_usecase.dart           ← UseCase<List<OrderEntity>, NoParam>
 │
 ├── presentation/
 │   ├── manager/order/
-│   │   ├── order_cubit.dart                  ← Cubit with loadData()
+│   │   ├── order_cubit.dart                  ← Cubit (ViewModel) → Repository
 │   │   └── order_state.dart                  ← Initial/Loading/Loaded/Error
 │   ├── pages/
 │   │   └── order_page.dart                   ← BlocProvider + BlocBuilder
@@ -132,11 +126,13 @@ lib/features/order/
 └── order_injection.dart                       ← GetIt registrations
 ```
 
-**Total: 11 Dart files generated**
+**Total: 10 Dart files generated**
+
+**Data flow:** `UI → Cubit → Repository → DataSource → Either<Failure, T> → emit State`
 
 ---
 
-## 🔧 Post-Generation Steps
+## Post-Generation Steps
 
 After generation, you need **3 manual steps** to complete the feature:
 
@@ -208,12 +204,12 @@ GoRoute(
 
 ---
 
-## ✏️ Optional Steps (Customizing Generated Code)
+## Optional Steps (Customizing Generated Code)
 
 ### Fill in the Entity Fields
 
 ```dart
-// lib/features/order/domain/entities/order_entity.dart
+// lib/features/order/data/models/order_entity.dart
 
 // Before (empty scaffold):
 class OrderEntity extends Equatable {
@@ -278,7 +274,7 @@ itemBuilder: (context, index) {
 
 ---
 
-## 📖 Full Practical Examples
+## Full Practical Examples
 
 ### Example 1 — Notifications Feature
 
@@ -321,8 +317,9 @@ Files are generated with the `medical_report` prefix:
 ```
 lib/features/medical_report/
 ├── data/datasources/medical_report_remote_data_source.dart
+├── data/models/medical_report_entity.dart
 ├── data/models/medical_report_model.dart
-├── domain/entities/medical_report_entity.dart
+├── data/repositories/medical_report_repository.dart
 ...
 └── medical_report_injection.dart
 ```
@@ -335,7 +332,7 @@ initMedicalReport();
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 **Q: Will it overwrite existing files?**  
 A: Yes, if the feature already exists. Mason will ask for confirmation before overwriting.
@@ -349,12 +346,12 @@ A: The current template generates Remote only. Use `home_local_data_source.dart`
 **Q: Why do I see red errors in VS Code inside the `bricks/` folder?**  
 A: This is expected — template files contain `{{}}` Mustache syntax which is not valid Dart. This is already handled via `analysis_options.yaml` with `exclude: ['bricks/**']`.
 
-**Q: What if I need additional use cases (Create, Delete, Update)?**  
-A: Create them manually inside `domain/usecases/` following the same pattern as `get_orders_usecase.dart`.
+**Q: What if I need additional repository methods (Create, Delete, Update)?**  
+A: Add them to the abstract repository and repository impl, then call them from the Cubit — no use-case layer needed.
 
 ---
 
-## 🗂️ `mason.yaml` Structure
+## `mason.yaml` Structure
 
 ```yaml
 # In the project root
@@ -365,4 +362,4 @@ bricks:
 
 ---
 
-*This guide is for the `flutter_clean_architecture_template` project.*
+*This guide is for the `flutter-mvvm-template` project.*
