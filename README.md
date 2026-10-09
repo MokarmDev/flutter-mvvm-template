@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🏗️ Flutter Clean Architecture Template
+# Flutter MVVM Template
 
-**A production-ready Flutter starter — feature-first Clean Architecture, scalable by design.**
+**A production-ready Flutter starter — feature-first MVVM, simple enough for small and medium apps.**
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.11+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
@@ -15,38 +15,36 @@
 
 ---
 
-## ✨ Highlights
+## Highlights
 
 | | Feature |
 |---|---|
-| 🧱 | **Feature-first Clean Architecture** — `presentation` → `domain` ← `data` |
-| 🎯 | **Cubit + GetIt** — predictable state & dependency injection |
-| 🔀 | **Either\<Failure, T\>** — typed errors via `dartz` + `safeCall` |
-| 🌐 | **Dio + Hive** — network with local cache fallback |
-| 🧭 | **go_router** — shell navigation with bottom tabs |
-| 🌍 | **Flavors + i18n** — `dev` / `prod` + `easy_localization` |
-| ⚡ | **Mason brick** — scaffold a full feature in one command |
+| | **Feature-first MVVM** — `presentation` (View + Cubit) → `data` (Repository · DataSource) |
+| | **Cubit + GetIt** — Cubit is the ViewModel; predictable state & DI |
+| | **Either\<Failure, T\>** — typed errors via `dartz` + `safeCall` |
+| | **Dio + Hive** — network with local cache fallback |
+| | **go_router** — shell navigation with bottom tabs |
+| | **Flavors + i18n** — `dev` / `prod` + `easy_localization` |
+| | **Mason brick** — scaffold a full feature in one command |
 
 > **Reference feature:** `home` — pagination, cache fallback, cancelable cubit.
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
 ```
 ┌──────────────────────────────────────────────────────┐
 │  presentation   Pages · Widgets · Cubit · State      │
+│                 (View + ViewModel)                   │
 ├──────────────────────────────────────────────────────┤
-│  domain         Entities · Repository · UseCases     │
-├──────────────────────────────────────────────────────┤
-│  data           Models · DataSources · RepoImpl      │
+│  data           Models · DataSources · Repository    │
 └──────────────────────────────────────────────────────┘
-         ▲                              │
-         │  domain is pure Dart         │  implements contracts
-         └──────────────────────────────┘
 ```
 
-**Data flow:** `UI → Cubit → UseCase → Repository → DataSource → Either<Failure, T> → emit State`
+**Data flow:** `UI → Cubit → Repository → DataSource → Either<Failure, T> → emit State`
+
+No domain layer or use cases — Cubit talks to the repository directly. Suited for simple and medium projects.
 
 ```
 lib/
@@ -55,14 +53,14 @@ lib/
 ├── core/            # DI · network · errors · storage
 ├── features/        # home · cart · profile · theme
 │   └── <feature>/
-│       ├── data/ · domain/ · presentation/
+│       ├── data/ · presentation/
 │       └── <feature>_injection.dart
-└── shared/          # use cases · widgets · navigation
+└── shared/          # widgets · navigation · mixins
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # 1. Install
@@ -83,7 +81,7 @@ flutter run --flavor dev -t lib/main_dev.dart
 
 ---
 
-## 📟 Commands
+## Commands
 
 ### Run & Build
 
@@ -125,26 +123,25 @@ flutter test
 
 ---
 
-## ➕ Add a Feature
+## Add a Feature
 
 After `mason make feature ...`, wire it up in **3 steps**:
 
 | Step | File | Action |
 |:----:|------|--------|
-| 1️⃣ | `lib/core/constants/api_endpoints.dart` | Add API endpoint |
-| 2️⃣ | `lib/core/di/injection_container.dart` | Call `initYourFeature()` in `initCore()` |
-| 3️⃣ | `lib/config/routing/app_router.dart` | Register `GoRoute` |
+| 1 | `lib/core/constants/api_endpoints.dart` | Add API endpoint |
+| 2 | `lib/core/di/injection_container.dart` | Call `initYourFeature()` in `initCore()` |
+| 3 | `lib/config/routing/app_router.dart` | Register `GoRoute` |
 
 **Pattern checklist** (follow `home`):
 
-- [ ] `UseCase<T, Param>` returns `Either<Failure, T>`
+- [ ] Cubit injects repository and folds `Either` → `Loading / Loaded / Error`
 - [ ] `RepositoryImpl` wraps calls with `safeCall`
-- [ ] `Cubit` folds `Either` → `Loading / Loaded / Error`
 - [ ] Page uses `BlocProvider(create: (_) => sl<YourCubit>())`
 
 ---
 
-## 📦 Tech Stack
+## Tech Stack
 
 | Layer | Packages |
 |-------|----------|
@@ -160,7 +157,7 @@ After `mason make feature ...`, wire it up in **3 steps**:
 
 <div align="center">
 
-**Built with ❤️ for scalable Flutter apps**
+**Built with care for scalable Flutter apps**
 
 [Report Bug](https://github.com/MokarmDev/flutter-clean-architecture-template/issues) · [Request Feature](https://github.com/MokarmDev/flutter-clean-architecture-template/issues)
 
