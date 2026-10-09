@@ -1,6 +1,6 @@
 import '../../../../core/storage/shared_prefs_service.dart';
 import '../../../../core/storage/storage_keys.dart';
-import '../../domain/entities/theme_entity.dart';
+import '../models/theme_entity.dart';
 
 class ThemeLocalDataSource {
   final SharedPreferencesService sharedPreferencesService;
