@@ -1,4 +1,4 @@
-import '../../../domain/entities/product/product_entity.dart';
+import 'product_entity.dart';
 import 'dimensions_model.dart';
 import 'meta_model.dart';
 import 'review_model.dart';
