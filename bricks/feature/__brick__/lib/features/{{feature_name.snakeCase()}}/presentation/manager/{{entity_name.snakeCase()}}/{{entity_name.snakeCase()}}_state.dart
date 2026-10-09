@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/{{entity_name.snakeCase()}}_entity.dart';
+import '../../../data/models/{{entity_name.snakeCase()}}_entity.dart';
 
 abstract class {{entity_name.pascalCase()}}State extends Equatable {
   const {{entity_name.pascalCase()}}State();
