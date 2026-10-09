@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entities/{{entity_name.snakeCase()}}_entity.dart';
+import '../../data/models/{{entity_name.snakeCase()}}_entity.dart';
 
 /// A simple ListView for {{entity_name.pascalCase()}} items.
 /// Replace this with your own UI implementation.
