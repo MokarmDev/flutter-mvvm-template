@@ -1,7 +1,7 @@
 import '../../../../core/constants/api_endpoints.dart';
 import '../../../../core/network/api_consumer.dart';
 import '../../../../shared/models/pagination/pagination_params.dart';
-import '../../domain/entities/product/product_entity.dart';
+import '../models/product/product_entity.dart';
 import '../models/product/product_model.dart';
 
 abstract class HomeRemoteDataSource {
