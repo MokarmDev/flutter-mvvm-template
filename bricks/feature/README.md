@@ -1,10 +1,10 @@
-# 🧱 Feature Brick — Clean Architecture Generator
+# Feature Brick — MVVM Generator
 
-Generate a **complete, production-ready feature** in one command, following this project's exact Clean Architecture patterns.
+Generate a **complete, production-ready feature** in one command, following this project's simple MVVM patterns.
 
 ---
 
-## 📦 Generated Files (11 files)
+## Generated Files (10 files)
 
 ```
 lib/features/{feature_name}/
@@ -12,19 +12,14 @@ lib/features/{feature_name}/
 │   ├── datasources/
 │   │   └── {feature_name}_remote_data_source.dart   ← abstract + impl
 │   ├── models/
+│   │   ├── {entity_name}_entity.dart                ← Equatable entity
 │   │   └── {entity_name}_model.dart                 ← extends entity + fromJson/toJson
 │   └── repositories/
+│       ├── {feature_name}_repository.dart           ← abstract interface
 │       └── {feature_name}_repository_impl.dart      ← uses safeCall
-├── domain/
-│   ├── entities/
-│   │   └── {entity_name}_entity.dart                ← Equatable entity
-│   ├── repositories/
-│   │   └── {feature_name}_repository.dart           ← abstract interface
-│   └── usecases/
-│       └── get_{entity_name}s_usecase.dart          ← UseCase<List<Entity>, NoParam>
 ├── presentation/
 │   ├── manager/{entity_name}/
-│   │   ├── {entity_name}_cubit.dart                 ← Cubit with loadData()
+│   │   ├── {entity_name}_cubit.dart                 ← Cubit (ViewModel) → Repository
 │   │   └── {entity_name}_state.dart                 ← Initial/Loading/Loaded/Error
 │   ├── pages/
 │   │   └── {feature_name}_page.dart                 ← BlocProvider + BlocBuilder
@@ -33,9 +28,11 @@ lib/features/{feature_name}/
 └── {feature_name}_injection.dart                    ← GetIt registrations
 ```
 
+**Data flow:** `UI → Cubit → Repository → DataSource → Either<Failure, T> → emit State`
+
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Step 1 — Make sure Mason is installed
 ```bash
@@ -61,7 +58,7 @@ mason make feature --feature_name notification --entity_name Notification
 
 ---
 
-## ✅ Post-Generation — Only 3 steps
+## Post-Generation — Only 3 steps
 
 ### 1. Add the endpoint in `core/constants/api_endpoints.dart`
 ```dart
@@ -91,7 +88,7 @@ GoRoute(
 
 ---
 
-## 📝 Notes
+## Notes
 - `{entity_name}_model.dart` contains empty `fromJson` and `toJson` methods — complete them according to your API
 - The entity is simple — add the fields you need
 - Works automatically with `safeCall` located in `core/utils/safe_call.dart`
