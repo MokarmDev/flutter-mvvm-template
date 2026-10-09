@@ -3,8 +3,8 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/utils/safe_call.dart';
 import '../../../../shared/models/pagination/pagination_params.dart';
-import '../../domain/entities/product/product_entity.dart';
-import '../../domain/repositories/home_repository.dart';
+import '../models/product/product_entity.dart';
+import 'home_repository.dart';
 import '../datasources/home_local_data_source.dart';
 import '../datasources/home_remote_data_source.dart';
 
