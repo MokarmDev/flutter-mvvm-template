@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../domain/entities/theme_entity.dart';
+import '../../data/models/theme_entity.dart';
 
 abstract class ThemeState extends Equatable {
   const ThemeState();
