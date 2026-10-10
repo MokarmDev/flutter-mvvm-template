@@ -1,0 +1,20 @@
+---
+description: Apply feature-first MVVM boundaries to Dart files
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Architecture boundaries
+
+Detailed layer layout lives in `01-architecture.mdc`. This rule is the boundary checklist.
+
+- Before editing, inspect the target feature and a comparable implementation, starting with `lib/features/home/` if it exists.
+- Keep widgets, pages, Cubit/Bloc, and UI state in the presentation layer (View + ViewModel).
+- Keep entities/models, data sources, and repository contracts/implementations in the data layer.
+- Cubit depends on the abstract repository only — do not call Dio, Hive, or data sources from presentation.
+- There is no domain or use-case layer; do not introduce one without an explicit request and approval.
+- Entities live under `data/models/`. Hive annotations on entities (as in `home` `ProductEntity`) follow that pattern when caching is required.
+- Follow the existing `Either<Failure, T>` and `safeCall` pattern where the repository uses it. Do not add a parallel error-handling convention.
+- Reuse existing dependency-injection registration conventions and feature injection files. Verify the actual registration flow before changing it.
+- Avoid generic abstractions, base classes, or extra layers unless the task requires them and the benefit is explained.
+- Do not move or rename public types or folders as part of an unrelated feature.
