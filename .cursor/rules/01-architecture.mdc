@@ -1,0 +1,55 @@
+---
+description: Feature-first MVVM layers and dependency rules
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Architecture
+
+## Dependency direction
+
+```
+presentation → data
+```
+
+- Data: entities/models under `data/models/`, data sources, abstract repository + `RepositoryImpl`.
+- Presentation: pages, widgets, Cubit + state (ViewModel).
+- Cubit depends on the abstract repository only — no domain or use-case layer.
+- Shared cross-feature code lives in `lib/shared/` and `lib/core/`.
+
+## Feature layout (follow `home`)
+
+```
+features/<feature>/
+├── data/datasources/   *_remote_data_source.dart [, *_local_data_source.dart]
+├── data/models/        *_entity.dart (Equatable; Hive OK when following home), *_model.dart (extends entity; manual fromJson/toJson)
+├── data/repositories/  *_repository.dart (abstract), *_repository_impl.dart
+├── presentation/manager/<entity>/  *_cubit.dart, *_state.dart
+├── presentation/pages/ *_page.dart
+├── presentation/widgets/
+└── <feature>_injection.dart
+```
+
+## Data flow
+
+`UI → Cubit → Repository → DataSource → Either<Failure, T> → emit State`
+
+## Allowed / forbidden imports
+
+| Layer | Allowed | Forbidden |
+|-------|---------|-----------|
+| data | entities/models, Dio/ApiConsumer, Hive, storage, Failure/dartz | flutter_bloc, widgets |
+| presentation | abstract repositories, entities, flutter_bloc, UI | Dio, Hive, data sources directly |
+
+## Adding a feature
+
+1. Ask approval, then `mason make feature --feature_name order --entity_name Order`
+2. Endpoint in `lib/core/constants/api_endpoints.dart`
+3. `initOrder()` in `lib/core/di/injection_container.dart`
+4. Route in `lib/config/routing/app_router.dart` + `route_names.dart`
+5. Wire DI: `registerLazySingleton` for repos/DS; `registerFactory` for cubits
+
+## Known deviations (do not copy for new API features)
+
+- `cart` / `profile`: stubs — incomplete wiring.
+- `theme`: local prefs without Either — acceptable only for simple local preferences.
